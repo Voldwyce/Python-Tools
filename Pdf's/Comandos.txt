@@ -1,0 +1,33 @@
+PDF Folder compressor
+---------------
+
+python pdf_folder_compressor.py pdfIn pdfOut pdfBack
+
+##Primer parametro = Carpeta donde cogemos los archivos
+
+##Segundo parametro = Carpeta donde dejamos los archivos comprimidos
+##Tercer parametro = Carpeta de backup con los archivos sin tocar
+
+-c (nivel de compresion 0-4) (opcional, por defecto es 2 si no ponemos nada)
+
+
+PDF compressor
+--------------
+
+python pdf_compressor name_file 
+
+##Primer parametro = Archivo a comprimir
+
+Opcionales:
+
+-o Ruta de salida (Si no especificamos se sobreescribe)
+-b Backup (Podemos crear un archivo de backup)
+
+Nota: Backup y ruta de salida son similares, si se usan los dos se crearan dos copias sin comprimir
+
+PDF Encrypt
+-----------
+
+python pdf_encrypt
+
+##Seguir los pasos de la consola
