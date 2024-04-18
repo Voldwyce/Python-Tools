@@ -1,7 +1,6 @@
 # v1.0
 # Modified version of theeko74 simple script
 # Dependency Ghostscript & shutil
-# MIT license -- free to use as you want, cheers
 
 # Author: Voldwyce
 
@@ -71,37 +70,69 @@ def get_ghostscript_path():
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("input", help="Ruta absoluta o relativa del archivo PDF ")
-    parser.add_argument("-o", "--out", help="Ruta absoluta o relativa del archivo de salida")
-    parser.add_argument("-c", "--compress", type=int, help="Nivel de compresion (0-4)")
-    parser.add_argument("-b", "--backup", action="store_true", help="Crear copia de seguridad del archivo original")
-    parser.add_argument("--open", action="store_true", default=False, help="Abrir el archivo despues de comprimir")
-    args = parser.parse_args()
 
-    # Compresion por defecto si no se especifica
-    if not args.compress:
-        args.compress = 2
+    print("PDF Compressor")
+    pathIn = input("Ruta absoluta o relativa del pdf: ")
+    print("Generar archivo de salida o reemplazar el original")
+    print("1. Generar archivo de salida")
+    print("2. Reemplazar archivo original")
+    option = input("Enter option: ")
+    if option == "1":
+        pathOut = input("Ruta absoluta o relativa del archivo de salida: ")
+    elif option == "2":
+        pathOut = pathIn
+    else:
+        print("Invalid option")
+        sys.exit(1)
+    print("Nivel de compresion")
+    print("0. Default")
+    print("1. Prepress")
+    print("2. Printer (Recomendado)")
+    print("3. Ebook")
+    print("4. Screen")
+    power = input("Enter option: ")
+
+    print("¿Generar backup del archivo original?")
+    print("1. Si")
+    print("2. No")
+    option = input("Enter option: ")
+    if option == "1":
+        backup = True
+    elif option == "2":
+        backup = False
+    else:
+        print("Invalid option")
+        sys.exit(1)
+
+    print("¿Abrir archivo despues de comprimir?")
+    print("1. Si")
+    print("2. No")
+    option = input("Enter option: ")
+    if option == "1":
+        open = True
+    elif option == "2":
+        open = False
+    else:
+        print("Invalid option")
+        sys.exit(1)
+
     # Archivo de salida por defecto si no se especifica
-    if not args.out:
-        args.out = "temp.pdf"
+    if not pathOut:
+        pathOut = "temp.pdf"
 
     # Run
-    compress(args.input, args.out, power=args.compress)
+    compress(pathIn, pathOut, power=int(power))
 
     # Si no se especifica archivo de salida, se sobreescribe el original
-    if args.out == "temp.pdf":
-        if args.backup:
-            shutil.copyfile(args.input, args.input.replace(".pdf", "_BACKUP.pdf"))
-        shutil.copyfile(args.out, args.input)
-        os.remove(args.out)
+    if not pathOut:
+        if backup:
+            shutil.copyfile(pathIn, pathIn.replace(".pdf", "_BACKUP.pdf"))
+        shutil.copyfile(pathOut, pathIn)
+        os.remove(pathOut)
 
     # Opcion para abrir el archivo despues de comprimir
-    if args.open:
-        if args.out == "temp.pdf" and args.backup:
-            subprocess.call(["open", args.input])
-        else:
-            subprocess.call(["open", args.out])
+    if open:
+        os.startfile(pathOut)
 
 
 if __name__ == "__main__":
