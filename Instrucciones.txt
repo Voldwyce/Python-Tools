@@ -1,32 +1,36 @@
+Ejecutar los comandos en una terminal cmd ubicada dentro de la carpeta donde tengamos los archivos.
+
+
 PDF Folder compressor
 ---------------
 
-python pdf_folder_compressor.py pdfIn pdfOut pdfBack
-
-##Primer parámetro = Carpeta donde cogemos los archivos
-##Segundo parámetro = Carpeta donde dejamos los archivos comprimidos
-##Tercer parámetro = Carpeta de backup con los archivos sin tocar
-
--c (nivel de compresión 0-4) (opcional, por defecto es 2 si no ponemos nada)
+## py pdf_folder_compressor.py
+Seguir las instrucciones en pantalla.
 
 
 PDF compressor
 --------------
 
-python pdf_compressor name_file 
+## py pdf_compressor.py
+Seguir las instrucciones en pantalla.
 
-##Primer parámetro = Archivo a comprimir
-
-Opcionales:
-
--o Ruta de salida (Si no especificamos se sobreescribe)
--b Backup (Podemos crear un archivo de backup)
 
 Nota: Backup y ruta de salida son similares, si se usan los dos se crearan dos copias sin comprimir
+
 
 PDF Encrypt
 -----------
 
-python pdf_encrypt
+## py pdf_encrypt.py
+Seguir las instrucciones en pantalla.
 
-##Seguir los pasos de la consola
+
+Water Reminder
+-----------
+
+## Ejecutar directamente el archivo.
+
+Nota: Por defecto la notificación aparece cada 30 minutos, para modificarlo editar la siguiente parte del archivo con cualquier editor de texto:
+- time.sleep(1800)
+
+

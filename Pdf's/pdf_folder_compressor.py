@@ -139,24 +139,24 @@ def comprimir_carpeta(input_folder, output_folder, successfull_folder, nivel_com
 
 
 def main():
-    parser = argparse.ArgumentParser(
-        description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    parser.add_argument("input", help="Ruta de la carpeta de entrada que contiene los archivos PDF")
-    parser.add_argument("output", help="Ruta de la carpeta de salida para los archivos comprimidos")
-    parser.add_argument("backup", help="Ruta de la carpeta donde se moverán los archivos originales")
-    parser.add_argument(
-        "-c", "--compress", type=int, choices=range(5), help="Nivel de compresión de 0 a 4"
-    )
-    args = parser.parse_args()
 
-    # Compresión por defecto
-    if args.compress is None:
-        args.compress = 0
+    print("Compresor de PDF")
+    print("Ingrese la ruta de la carpeta de entrada que contiene los archivos PDF")
+    pathIn = input("Ruta: ")
+    print("Ingrese la ruta de la carpeta de salida para los archivos comprimidos")
+    pathOut = input("Ruta: ")
+    print("Ingrese la ruta de la carpeta donde se moverán los archivos originales")
+    pathBackup = input("Ruta: ")
+    print("Nivel de compresión")
+    print("0. Default")
+    print("1. Prepress")
+    print("2. Printer (Recomendado)")
+    print("3. Ebook")
+    print("4. Screen")
+    power = input("Opción: ")
 
     # Ejecutar compresión de la carpeta
-    comprimir_carpeta(args.input, args.output, args.backup, nivel_compresion=args.compress)
-
+    comprimir_carpeta(pathIn, pathOut, pathBackup, nivel_compresion=int(power))
 
 if __name__ == "__main__":
     main()
