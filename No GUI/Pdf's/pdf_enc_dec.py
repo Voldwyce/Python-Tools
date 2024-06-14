@@ -9,9 +9,9 @@ import pikepdf
 import os
 
 def main():
-    print("PDF Encrypter/Decrypter")
-    print("1. Encrypt")
-    print("2. Decrypt")
+    print("PDF Encriptar/Desencriptar")
+    print("1. Encriptar")
+    print("2. Desencriptar")
     option = input("Enter option: ")
     if option == "1":
         encrypt()
@@ -21,7 +21,7 @@ def main():
         print("Invalid option")
 
 def encrypt():
-    print("PDF Encrypter")
+    print("PDF Encriptar")
     path = input("Ruta absoluta o relativa del pdf: ")
     owner_password = input("Enter owner password: ")
     user_password = input("Enter user password: ")
@@ -44,7 +44,7 @@ def encrypt():
 
 
 def decrypt():
-    print("PDF Decrypter")
+    print("PDF Desencriptar")
     path = input("Ruta absoluta o relativa del pdf: ")
     password = input("Enter the owner password: ")
     output_file_name = path , "_decrypted.pdf"
