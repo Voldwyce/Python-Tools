@@ -2,7 +2,7 @@ import os
 
 def main():
     os.system('cls')
-    print("Bienvenido a la Python vault tools")
+    print("Bienvenido a Python vault tools")
     print("------------------------------------")
     print("Por favor, seleccione una de las siguientes categorias:")
     print("1. Pdf's")
@@ -19,7 +19,7 @@ def main():
             print("")
             print("1. Comprimir Pdf")
             print("2. Comprimir carpeta de Pdf's")
-            print("3. Encryptar/Decryptar Pdf")
+            print("3. Encriptar/Desencriptar Pdf")
             print("4. Volver")
             print("------------------------------------")
             opcion = input("Seleccione una opcion: ")
@@ -32,7 +32,7 @@ def main():
                 case "2":
                     os.system("python Pdf's/pdf_folder_compressor.py")
                 case "3":
-                    os.system("python Pdf's/pdf_encrypt_decrypt.py")
+                    os.system("python Pdf's/pdf_enc_dec.py")
                 case "4":
                     main()
                 case _: 
