@@ -36,25 +36,27 @@ class MainWindow(QMainWindow):
         
         if ok and option:
             if option == "Comprimir Pdf":
-                os.system("python Pdf's/pdf_compressor.py")
+                os.system("python GUI/Pdf's/pdf_compressor.py")
             elif option == "Comprimir carpeta de Pdf's":
-                os.system("python Pdf's/pdf_folder_compressor.py")
+                os.system("python GUI/Pdf's/pdf_folder_compressor.py")
             elif option == "Encriptar/Desencriptar Pdf":
-                os.system("python Pdf's/pdf_enc_dec.py")
+                os.system("python GUI/Pdf's/pdf_enc_dec.py")
 
     def other_options(self):
-        options = ["QOTD", "Water Reminder"]
+        options = ["QOTD", "Water Reminder", "Youtube Downloader"]
         option, ok = QInputDialog.getItem(self, "Categoría Otros", "Seleccione una opción:", options, 0, False)
         
         if ok and option:
             if option == "QOTD":
-                os.system("python Other/qotd.py")
+                os.system("python GUI/Other/qotd.py")
             elif option == "Water Reminder":
                 tiempo, ok = QInputDialog.getInt(self, "Water Reminder", "Cada cuanto quieres recibir el recordatorio? (en minutos):")
                 if ok:
                     tiempo = str(tiempo * 60)
-                    os.system(f"python Other/water_reminder.pyw -t {tiempo}")
+                    os.system(f"python NoGUI/Other/water_reminder.pyw -t {tiempo}")
                     QMessageBox.information(self, "Recordatorio", "El recordatorio de agua ha sido configurado.")
+            elif option == "Youtube Downloader":
+                os.system("python GUI/Other/youtube_downloader.py")
 
 def main():
     app = QApplication(sys.argv)

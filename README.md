@@ -18,6 +18,9 @@ Python Tools es una colección de diferentes scripts hechos en Python, algunos s
 - ghostscript
 - plyer
 - pikepdf
+- pyside6
+- pytube
+- moviepy
 
 ## Notas:
 Los scripts pueden tener fallos, y estoy abierto a recibir mejoras o ideas.

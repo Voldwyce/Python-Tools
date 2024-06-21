@@ -43,7 +43,8 @@ def main():
             print("")
             print("1. QOTD")
             print("2. Water Reminder")
-            print("3. Volver")
+            print("3. Youtube Downloader")
+            print("0. Volver")
             print("------------------------------------")
             opcion = input("Seleccione una opcion: ")
             os.system('cls')
@@ -57,6 +58,8 @@ def main():
                     os.system("python Other/water_reminder.pyw -t " + tiempo)
                     os.system('exit')
                 case "3":
+                    os.system("python Other/youDownload.py")
+                case "0":
                     main()
                 case _:
                     print("Opcion no valida")
