@@ -56,7 +56,7 @@ class MainWindow(QMainWindow):
                     os.system(f"python NoGUI/Other/water_reminder.pyw -t {tiempo}")
                     QMessageBox.information(self, "Recordatorio", "El recordatorio de agua ha sido configurado.")
             elif option == "Youtube Downloader":
-                os.system("python GUI/Other/youtube_downloader.py")
+                os.system("python GUI/Other/youDownload.py")
 
 def main():
     app = QApplication(sys.argv)
