@@ -43,7 +43,7 @@ class MainWindow(QMainWindow):
                 os.system("python GUI/Pdf's/pdf_enc_dec.py")
 
     def other_options(self):
-        options = ["QOTD", "Water Reminder", "Youtube Downloader"]
+        options = ["QOTD", "Water Reminder", "Youtube Downloader", "File Converter & Resizer"]
         option, ok = QInputDialog.getItem(self, "Categoría Otros", "Seleccione una opción:", options, 0, False)
         
         if ok and option:
@@ -57,6 +57,8 @@ class MainWindow(QMainWindow):
                     QMessageBox.information(self, "Recordatorio", "El recordatorio de agua ha sido configurado.")
             elif option == "Youtube Downloader":
                 os.system("python GUI/Other/youDownload.py")
+            elif option == "File Converter & Resizer":
+                os.system("python GUI/Other/FileConverterApp.py")
 
 def main():
     app = QApplication(sys.argv)
