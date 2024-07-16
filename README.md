@@ -22,15 +22,15 @@ Python Tools es una colección de diferentes scripts hechos en Python, algunos s
 - pytube
 - moviepy
 
-## Notas:
+## Notas
+
 Los scripts pueden tener fallos, y estoy abierto a recibir mejoras o ideas.
 Son de libre uso, pero se agradecería una mención.
 
-
-## To do:
+## To do
 
 - Image Metadata
-- Acabar FileConverter
+- Mejoras FileConverter
 - Web Tracker (Cambios o precios)
 - Conversion divisas
 - Logs (Temperatura pc, uso, etc...)

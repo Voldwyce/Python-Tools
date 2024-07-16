@@ -2,8 +2,7 @@ import sys
 import os
 from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QLabel, QPushButton, QFileDialog, 
                                QComboBox, QLineEdit, QMessageBox, QCheckBox, QStackedWidget, QProgressBar, 
-                               QGridLayout, QGroupBox, QHBoxLayout, QSpacerItem, QSizePolicy)
-from PySide6.QtGui import QPixmap, QImage
+                               QGridLayout, QGroupBox, QHBoxLayout)
 from PySide6.QtCore import Qt, QThread, Signal, Slot
 from PIL import Image
 import moviepy.editor as mp
@@ -28,8 +27,10 @@ class ConversionThread(QThread):
 class FileConverterApp(QWidget):
     def __init__(self):
         super().__init__()
+        self.selected_file_paths = []
+        self.selected_file_type = None
         self.setWindowTitle("File Converter & Resizer")
-        self.setGeometry(100, 100, 800, 600)
+        self.setGeometry(100, 100, 600, 400)
 
         self.stacked_widget = QStackedWidget()
 
@@ -47,11 +48,14 @@ class FileConverterApp(QWidget):
         self.video_button.clicked.connect(self.show_video_options)
         self.audio_button.clicked.connect(self.show_audio_options)
 
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.image_button)
+        button_layout.addWidget(self.video_button)
+        button_layout.addWidget(self.audio_button)
+
         self.file_type_layout.addWidget(self.file_type_label)
-        self.file_type_layout.addWidget(self.image_button)
-        self.file_type_layout.addWidget(self.video_button)
-        self.file_type_layout.addWidget(self.audio_button)
-        
+        self.file_type_layout.addLayout(button_layout)
+
         self.file_type_selection_widget.setLayout(self.file_type_layout)
         
         self.file_options_widget = QWidget()
@@ -131,6 +135,7 @@ class FileConverterApp(QWidget):
         self.stacked_widget.setCurrentWidget(self.file_type_selection_widget)
 
     def show_image_options(self):
+        self.selected_file_type = "Imagen"
         self.resize_checkbox.setVisible(True)
         self.resize_checkbox.setEnabled(True)
         self.resize_checkbox.setChecked(False)
@@ -144,6 +149,7 @@ class FileConverterApp(QWidget):
         self.stacked_widget.setCurrentWidget(self.file_options_widget)
 
     def show_video_options(self):
+        self.selected_file_type = "Video"
         self.resize_checkbox.setVisible(False)
         self.actions_groupbox.setVisible(False)
         self.width_label.setVisible(False)
@@ -155,6 +161,7 @@ class FileConverterApp(QWidget):
         self.stacked_widget.setCurrentWidget(self.file_options_widget)
 
     def show_audio_options(self):
+        self.selected_file_type = "Audio"
         self.resize_checkbox.setVisible(False)
         self.actions_groupbox.setVisible(False)
         self.width_label.setVisible(False)
@@ -164,6 +171,7 @@ class FileConverterApp(QWidget):
         self.disable_resize_options()
         self.populate_formats(["mp3", "wav", "aac", "flac", "ogg", "aiff", "alac", "midi"])
         self.stacked_widget.setCurrentWidget(self.file_options_widget)
+
 
     def toggle_resize_options(self, state):
         if Qt.CheckState(state) == Qt.Checked:
@@ -192,7 +200,14 @@ class FileConverterApp(QWidget):
     def select_file(self):
         file_dialog = QFileDialog()
         file_dialog.setFileMode(QFileDialog.ExistingFiles)
-        file_dialog.setNameFilter("Archivos (*.jpg *.png *.gif *.bmp *.tif *.webp *.heic *.svg *.pdf *.ico *.mp4 *.mov *.avi *.wmv *.flv *.mkv *.webm *.h264 *.h265 *.mp3 *.wav *.aac *.flac *.ogg *.aiff *.alac *.midi)")
+
+        if self.selected_file_type == "Imagen":
+            file_dialog.setNameFilter("Archivos de Imagen (*.jpg *.png *.gif *.bmp *.tif *.webp *.heic *.svg *.pdf *.ico)")
+        elif self.selected_file_type == "Video":
+            file_dialog.setNameFilter("Archivos de Video (*.mp4 *.mov *.avi *.wmv *.flv *.mkv *.webm *.h264 *.h265)")
+        elif self.selected_file_type == "Audio":
+            file_dialog.setNameFilter("Archivos de Audio (*.mp3 *.wav *.aac *.flac *.ogg *.aiff *.alac *.midi)")
+
         if file_dialog.exec():
             file_paths = file_dialog.selectedFiles()
             self.selected_file_paths = file_paths
@@ -222,11 +237,11 @@ class FileConverterApp(QWidget):
                 file_type = "Audio"
             
             if file_type == "Imagen":
-                conversion_thread = ConversionThread(self.convert_image, file_path, dest_format)
+                conversion_thread = ConversionThread(self.convert_image, file_path, dest_format, self.replace_checkbox.isChecked())
             elif file_type == "Video":
-                conversion_thread = ConversionThread(self.convert_video, file_path, dest_format)
+                conversion_thread = ConversionThread(self.convert_video, file_path, dest_format, self.replace_checkbox.isChecked())
             elif file_type == "Audio":
-                conversion_thread = ConversionThread(self.convert_audio, file_path, dest_format)
+                conversion_thread = ConversionThread(self.convert_audio, file_path, dest_format, self.replace_checkbox.isChecked())
             else:
                 QMessageBox.warning(self, "Error", "Formato no soportado.")
                 continue
@@ -245,26 +260,36 @@ class FileConverterApp(QWidget):
         if success:
             QMessageBox.information(self, "Convertido", f"Archivo convertido a {dest_format} exitosamente: {file_path}")
         else:
-            QMessageBox.critical(self, "Error", f"Error al convertir archivo: {file_path}")
+            QMessageBox.critical(self, "Error", f"Error al convertir archivo: {file_path}\n\nDetalles del error: {sys.exc_info()[1]}")
 
-    def convert_image(self, file_path, dest_format):
+    def convert_image(self, file_path, dest_format, replace_original):
         img = Image.open(file_path)
         if self.resize_checkbox.isChecked():
             width = int(self.width_edit.text())
             height = int(self.height_edit.text())
             img = img.resize((width, height), Image.LANCZOS)
-        output_path = file_path if self.replace_checkbox.isChecked() else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
+        output_path = f"{os.path.splitext(file_path)[0]}.{dest_format}" if replace_original else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
         img.save(output_path)
+        if replace_original:
+            os.remove(file_path)
+            os.rename(output_path, os.path.splitext(output_path)[0] + os.path.splitext(output_path)[1])
 
-    def convert_video(self, file_path, dest_format):
+
+    def convert_video(self, file_path, dest_format, replace_original):
         video = mp.VideoFileClip(file_path)
-        output_path = file_path if self.replace_checkbox.isChecked() else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
+        output_path = f"{os.path.splitext(file_path)[0]}.{dest_format}" if replace_original else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
         video.write_videofile(output_path)
+        if replace_original:
+            os.remove(file_path)
+            os.rename(output_path, os.path.splitext(output_path)[0] + os.path.splitext(output_path)[1])
 
-    def convert_audio(self, file_path, dest_format):
+    def convert_audio(self, file_path, dest_format, replace_original):
         audio = mp.AudioFileClip(file_path)
-        output_path = file_path if self.replace_checkbox.isChecked() else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
+        output_path = f"{os.path.splitext(file_path)[0]}.{dest_format}" if replace_original else f"{os.path.splitext(file_path)[0]}_converted.{dest_format}"
         audio.write_audiofile(output_path)
+        if replace_original:
+            os.remove(file_path)
+            os.rename(output_path, os.path.splitext(output_path)[0] + os.path.splitext(output_path)[1])
 
     def reset_fields(self):
         self.selected_file_text.clear()
