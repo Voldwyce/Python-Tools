@@ -1,0 +1,94 @@
+import sys
+import random
+import string
+from PySide6.QtWidgets import (QApplication, QWidget, QVBoxLayout, QHBoxLayout, QLabel, QSlider, QCheckBox, QPushButton, QLineEdit)
+from PySide6.QtCore import Qt
+
+class PasswordGeneratorApp(QWidget):
+    def __init__(self):
+        super().__init__()
+        self.setWindowTitle('Generador de Contraseñas')
+        self.setGeometry(100, 100, 400, 300)
+        
+        self.layout = QVBoxLayout()
+
+        self.length_layout = QHBoxLayout()
+        self.length_label = QLabel('Longitud de la contraseña:')
+        self.length_layout.addWidget(self.length_label)
+
+        self.length_value_label = QLabel('12')
+        self.length_layout.addWidget(self.length_value_label)
+
+        self.layout.addLayout(self.length_layout)
+
+        self.slider = QSlider(Qt.Horizontal)
+        self.slider.setMinimum(4)
+        self.slider.setMaximum(32)
+        self.slider.setValue(12)
+        self.slider.setTickPosition(QSlider.TicksBelow)
+        self.slider.setTickInterval(1)
+        self.slider.valueChanged.connect(self.update_length_label)
+        self.layout.addWidget(self.slider)
+        
+        self.options_layout = QHBoxLayout()
+
+        self.uppercase_checkbox = QCheckBox('Mayúsculas')
+        self.uppercase_checkbox.setChecked(True)
+        self.options_layout.addWidget(self.uppercase_checkbox)
+
+        self.lowercase_checkbox = QCheckBox('Minúsculas')
+        self.lowercase_checkbox.setChecked(True)
+        self.options_layout.addWidget(self.lowercase_checkbox)
+
+        self.numbers_checkbox = QCheckBox('Números')
+        self.numbers_checkbox.setChecked(True)
+        self.options_layout.addWidget(self.numbers_checkbox)
+
+        self.symbols_checkbox = QCheckBox('Símbolos')
+        self.symbols_checkbox.setChecked(True)
+        self.options_layout.addWidget(self.symbols_checkbox)
+
+        self.layout.addLayout(self.options_layout)
+
+        self.generate_button = QPushButton('Generar contraseña')
+        self.generate_button.clicked.connect(self.generate_password)
+        self.layout.addWidget(self.generate_button)
+
+        self.password_field = QLineEdit()
+        self.password_field.setReadOnly(True)
+        self.layout.addWidget(self.password_field)
+
+        self.setLayout(self.layout)
+
+    def update_length_label(self):
+        self.length_value_label.setText(str(self.slider.value()))
+
+    def generate_password(self):
+        length = self.slider.value()
+        characters = ''
+        if self.uppercase_checkbox.isChecked():
+            characters += string.ascii_uppercase
+        if self.lowercase_checkbox.isChecked():
+            characters += string.ascii_lowercase
+        if self.numbers_checkbox.isChecked():
+            characters += string.digits
+        if self.symbols_checkbox.isChecked():
+            characters += string.punctuation
+        
+        if not characters:
+            self.password_field.setText('Seleccione al menos una opción')
+            return
+
+        password = ''.join(random.choice(characters) for _ in range(length))
+        self.password_field.setText(password)
+
+if __name__ == '__main__':
+    app = QApplication(sys.argv)
+    window = PasswordGeneratorApp()
+    window.show()
+    sys.exit(app.exec())
+    
+    
+    
+    
+    

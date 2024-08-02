@@ -2,7 +2,7 @@
 
 ## ¿Qué es?
 
-Python Tools es una colección de diferentes scripts hechos en Python, algunos se ejecutan vía cmd y otros directamente sin necesidad de interactuar. Son fácilmente modificables para cumplir diferentes propósitos o añadir/quitar funcionalidades.
+Python Tools es una colección de diferentes scripts hechos en Python, algunos se ejecutan vía cmd y otros via interfaz grafica. Son fácilmente modificables para cumplir diferentes propósitos i/o añadir/quitar funcionalidades.
 
 ## Lista
 
@@ -11,6 +11,10 @@ Python Tools es una colección de diferentes scripts hechos en Python, algunos s
 - PDF Encrypt
 - QOTD
 - Water Reminder
+- Video/Audio downloader
+- Password Generator (WIP)
+- File Converter & Resizer
+- Password generator
 
 ## Requisitos y dependencias
 
